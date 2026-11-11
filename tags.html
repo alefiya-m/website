@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tags</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#02084b;--ink:#d9d9d9;--big:clamp(1.3rem,1.6vw + .6rem,2.2rem);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.1rem/1.4 "Libre Franklin","Franklin Gothic Medium","Franklin Gothic",Arial,sans-serif}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+[hidden]{display:none!important}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 0;padding:0;list-style:none}
+.dl{display:inline-block;padding:.55rem 1.1rem;border:1.5px solid var(--ink);color:var(--ink);text-decoration:none}
+.dl:hover,.dl:focus-visible{background:var(--ink);color:#0b1366}
+.dls{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}
+.tags a{display:inline-block;padding:.1rem .7rem;border:1px solid rgba(217,217,217,.4);border-radius:999px;font-size:.85rem;color:var(--ink);text-decoration:none}
+.tags a:hover,.tags a:focus-visible{background:rgba(217,217,217,.18)}
+.tv{max-width:60rem;margin:0 auto;padding:2rem clamp(1.25rem,4vw,6rem) 4rem}
+.tvn{display:flex;flex-wrap:wrap;gap:1.5rem}
+.tv h1{margin:1.5rem 0;font-weight:400;font-size:var(--big);line-height:1.2}
+.tvl{display:grid;gap:2rem;margin:0;padding:0;list-style:none}
+.item{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);gap:1.5rem;align-items:start}
+.item.nocov{grid-template-columns:minmax(0,1fr)}
+.item img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid rgba(217,217,217,.3)}
+.item h2{margin:0 0 .4rem;font-weight:400;font-size:1.5rem}
+.item p{margin:0 0 .8rem}
+@media(max-width:560px){.item{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<main class="tv" id="tagview">
+  <nav class="tvn"><a href="index.html">← Back to the museum</a><a href="tags.html">All tags</a></nav>
+  <h1></h1>
+  <ul class="tvl"></ul>
+</main>
+
+<script src="projects.js"></script>
+<script>
+const TAGHREF=s=>'#'+s;
+function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
+function mk(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function chip(t,n){const a=mk('a',null,n==null?t:`${t} (${n})`);a.href=TAGHREF(slug(t));return a}
+function tagIndex(){const m=new Map();(window.PROJECTS||[]).forEach(p=>(p.tags||[]).forEach(t=>{const s=slug(t);if(!m.has(s))m.set(s,{label:t,items:[]});m.get(s).items.push(p)}));return m}
+function dlLinks(p){return (p.downloads||(p.download?[p.download]:[])).map(d=>{const a=mk('a','dl',d.label||'Download');a.href=d.url;a.setAttribute('download','');return a})}
+function tagRow(p){const ul=mk('ul','tags');(p.tags||[]).forEach(t=>{const li=mk('li');li.append(chip(t));ul.append(li)});return ul}
+function renderTagView(s,root){
+  const idx=tagIndex(),h=root.querySelector('h1'),list=root.querySelector('.tvl'),hit=idx.get(s);
+  list.replaceChildren();
+  if(!hit){
+    h.textContent=idx.size?(s?'No items with that tag yet. All tags:':'All tags'):'No tags yet';
+    const ul=mk('ul','tags');idx.forEach(v=>{const li=mk('li');li.append(chip(v.label,v.items.length));ul.append(li)});
+    const li=mk('li');li.append(ul);list.append(li);return;
+  }
+  h.textContent=hit.label;
+  hit.items.forEach(p=>{
+    const li=mk('li',p.cover?'item':'item nocov');
+    if(p.cover){const im=mk('img');im.src=p.cover;im.alt='';li.append(im)}
+    const b=mk('div');b.append(mk('h2',null,p.title),mk('p',null,p.description),tagRow(p));
+    const ds=dlLinks(p);if(ds.length){const d=mk('div','dls');d.append(...ds);b.append(d)}
+    li.append(b);list.append(li);
+  });
+}
+
+function go(){
+  const s=location.hash.slice(1),hit=tagIndex().get(s);
+  renderTagView(s,document.getElementById('tagview'));
+  document.title=(hit?hit.label:'Tags')+' · Alefiya';scrollTo(0,0);
+}
+addEventListener('hashchange',go);go();
+</script>
+</body>
+</html>
