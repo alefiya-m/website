@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alefiya: a museum of myself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#02084b;--ink:#d9d9d9;--big:clamp(1.3rem,1.6vw + .6rem,2.2rem);--small:clamp(.95rem,.7vw + .6rem,1.3rem);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font:400 1.1rem/1.4 "Libre Franklin","Franklin Gothic Medium","Franklin Gothic",Arial,sans-serif}
+.page{position:relative;height:100%}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+header{position:absolute;left:0;top:0;padding:1.5rem clamp(1.25rem,4vw,6rem)}
+h1{margin:0 0 .3rem;font-weight:400;font-size:var(--big);line-height:1.2}
+.me{margin:0;padding-left:1.6rem;font-size:var(--small);line-height:1.5}
+.burger{position:absolute;top:1.75rem;right:clamp(1.25rem,4vw,6rem);z-index:6;width:2.6rem;height:2.2rem;padding:0;border:0;cursor:pointer;color:var(--ink);
+background:linear-gradient(currentColor,currentColor) top/100% 3px no-repeat,linear-gradient(currentColor,currentColor) center/100% 3px no-repeat,linear-gradient(currentColor,currentColor) bottom/100% 3px no-repeat}
+#menu{position:absolute;top:4.8rem;right:clamp(1.25rem,4vw,6rem);z-index:5;max-height:60%;overflow:auto;padding:.5rem;background:#0b1366;border:1px solid rgba(217,217,217,.3)}
+#menu[hidden]{display:none}
+#menu a{display:block;padding:.45rem .9rem;color:inherit;text-decoration:none;white-space:nowrap}
+#menu a:hover,#menu a:focus-visible{background:rgba(217,217,217,.14)}
+#menu .all{margin-top:.3rem;border-top:1px solid rgba(217,217,217,.3)}
+.foot{position:absolute;right:clamp(1.25rem,4vw,6rem);bottom:1.4rem;margin:0;text-align:right;pointer-events:none}
+.foot b{display:block;font-weight:400;font-size:var(--big)}
+.foot span{font-size:var(--small)}
+
+.strip{position:absolute;left:0;right:0;top:13rem;bottom:5.5rem;overflow:hidden;container-type:size;--u:calc(100cqh / 1304);cursor:grab;touch-action:pan-y;user-select:none}
+.track{display:flex;height:100%;width:max-content;will-change:transform}
+.tile{flex:none;position:relative;width:calc(3415 * var(--u));height:100%}
+.frame{position:absolute;left:calc(var(--x) * var(--u));top:calc(var(--y) * var(--u));width:calc(var(--w) * var(--u));height:calc(var(--h) * var(--u));display:grid;place-items:center;padding:0;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer;transition:scale .2s}
+.frame .fr{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));transition:filter .2s}
+.frame span{position:relative;z-index:1;max-width:60%;text-align:center;font-size:clamp(.78rem,.7vw + .4rem,1rem);opacity:.7;transition:opacity .2s}
+.frame:hover,.frame:focus-visible{scale:1.03}
+.frame:hover .fr,.frame:focus-visible .fr{filter:drop-shadow(0 10px 18px rgba(0,0,0,.45)) brightness(1.12)}
+.frame:hover span,.frame:focus-visible span{opacity:1}
+
+dialog{width:min(30rem,calc(100% - 2.5rem));padding:2rem;--cover-opacity:.5;background:linear-gradient(rgba(11,19,102,calc(1 - var(--cover-opacity))),rgba(11,19,102,calc(1 - var(--cover-opacity)))),var(--cv,none) center/cover,#0b1366;color:var(--ink);text-shadow:0 1px 10px rgba(2,8,75,.7);border:1px solid rgba(217,217,217,.35);font:inherit}
+dialog::backdrop{background:rgba(1,3,25,.72)}
+dialog h2{margin:0 0 .8rem;font-weight:400;font-size:1.8rem}
+dialog p{margin:0}
+.x{position:absolute;top:.6rem;right:.9rem;border:0;background:none;color:inherit;font-size:1.8rem;line-height:1;cursor:pointer}
+[hidden]{display:none!important}
+.cov{position:absolute;object-fit:cover;display:block;pointer-events:none}
+dialog{max-height:calc(100dvh - 3rem);overflow:auto}
+dialog[open]{display:flex;flex-direction:column;min-height:min(30rem,calc(100dvh - 3rem))}
+dialog h2{margin-top:auto;padding-top:2.5rem}
+.x{top:.8rem;right:.8rem;z-index:1;width:2.2rem;height:2.2rem;border-radius:50%;background:rgba(2,8,75,.75)}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 0;padding:0;list-style:none}
+.dl{display:inline-block;padding:.55rem 1.1rem;border:1.5px solid var(--ink);color:var(--ink);text-decoration:none}
+.dl:hover,.dl:focus-visible{background:var(--ink);color:#0b1366}
+.dls{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}
+.tags a{display:inline-block;padding:.1rem .7rem;border:1px solid rgba(217,217,217,.4);border-radius:999px;font-size:.85rem;color:var(--ink);text-decoration:none}
+.tags a:hover,.tags a:focus-visible{background:rgba(217,217,217,.18)}
+.tv{max-width:60rem;margin:0 auto;padding:2rem clamp(1.25rem,4vw,6rem) 4rem}
+.tvn{display:flex;flex-wrap:wrap;gap:1.5rem}
+.tv h1{margin:1.5rem 0;font-weight:400;font-size:var(--big);line-height:1.2}
+.tvl{display:grid;gap:2rem;margin:0;padding:0;list-style:none}
+.item{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);gap:1.5rem;align-items:start}
+.item.nocov{grid-template-columns:minmax(0,1fr)}
+.item img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid rgba(217,217,217,.3)}
+.item h2{margin:0 0 .4rem;font-weight:400;font-size:1.5rem}
+.item p{margin:0 0 .8rem}
+@media(max-width:560px){.item{grid-template-columns:minmax(0,1fr)}}
+.sub{margin:-.4rem 0 .8rem;font-size:.95rem;opacity:.85}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Hello!<br>I’m Alefiya.</h1>
+    <ul class="me">
+      <li><a href="mailto:alefiyamalubhoy@gmail.com">alefiyamalubhoy@gmail.com</a></li>
+      <li>here’s some art I like ↴</li>
+    </ul>
+  </header>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu"></button>
+  <nav id="menu" hidden aria-label="Tags"></nav>
+
+  <div class="strip" id="strip"><div class="track" id="track"><div class="tile" id="tile"></div></div></div>
+
+  <p class="foot"><b>A museum of myself.</b><span>Zoom out for more.</span></p>
+</div>
+
+<dialog id="dlg" aria-labelledby="dt">
+  <button class="x" aria-label="Close">×</button>
+  <h2 id="dt"></h2>
+  <p id="dsub" class="sub" hidden></p>
+  <p id="dp"></p>
+  <ul id="dtags" class="tags"></ul>
+  <div id="ddl" class="dls" hidden></div>
+</dialog>
+
+<script src="projects.js"></script>
+<script>
+const F=[[32,72,418,626,"frames/frame-01.webp","mahogany-rectangle-simple-large",[15.55,10.54,68.9,79.07,0]],[515,105,568,394,"frames/frame-02.webp","bronze-rectangle-ornate-medium",[14.08,18.78,72.36,61.68,0]],[1251,85,487,605,"frames/frame-03.webp","black-rectangle-simple-large",[8.42,6.45,83.16,86.94,0]],[1830,40,275,218,"frames/frame-04.webp","darkgold-rectangle-simple-small",[8.36,11.01,83.27,78.44,0]],[2237,72,261,209,"frames/frame-05.webp","darkgold-oval-ornate-small",[14.94,17.7,70.5,64.59,1]],[2522,72,851,604,"frames/frame-06.webp","gold-rectangle-simple-large",[6.93,9.93,85.9,80.13,0]],[1903,306,418,464,"frames/frame-07.webp","gold-rectangle-ornate-medium",[16.99,15.52,65.31,68.53,0]],[262,742,516,518,"frames/frame-08.webp","gold-square-ornate-large",[12.98,13.13,74.22,73.94,0]],[829,629,514,510,"frames/frame-09.webp","gold-circle-simple-large",[8.37,8.24,83.46,83.53,1]],[1391,795,509,411,"frames/frame-10.webp","brown-rectangle-ornate-medium",[10.41,12.65,78.59,73.97,0]],[1971,878,326,386,"frames/frame-11.webp","gold-oval-ornate-small",[14.72,11.14,70.55,77.72,1]],[2369,741,318,471,"frames/frame-12.webp","cream-rectangle-simple-medium",[11.64,9.77,74.84,82.8,0]],[2734,824,316,306,"frames/frame-13.webp","rosegold-circle-ornate-small",[17.72,16.99,64.56,66.01,1]],[3099,734,521,456,"frames/frame-14.webp","olive-rectangle-simple-medium",[9.02,10.53,81.77,78.95,0]]];
+const $=id=>document.getElementById(id),track=$('track'),tile=$('tile'),strip=$('strip'),dlg=$('dlg'),menu=$('menu'),burger=$('burger');
+const TAGHREF=s=>'tags.html#'+s,ALLTAGS='tags.html';
+function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
+function mk(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function chip(t,n){const a=mk('a',null,n==null?t:`${t} (${n})`);a.href=TAGHREF(slug(t));return a}
+function tagIndex(){const m=new Map();(window.PROJECTS||[]).forEach(p=>(p.tags||[]).forEach(t=>{const s=slug(t);if(!m.has(s))m.set(s,{label:t,items:[]});m.get(s).items.push(p)}));return m}
+function dlLinks(p){return (p.downloads||(p.download?[p.download]:[])).map(d=>{const a=mk('a','dl',d.label||'Download');a.href=d.url;a.setAttribute('download','');return a})}
+function tagRow(p){const ul=mk('ul','tags');(p.tags||[]).forEach(t=>{const li=mk('li');li.append(chip(t));ul.append(li)});return ul}
+function renderTagView(s,root){
+  const idx=tagIndex(),h=root.querySelector('h1'),list=root.querySelector('.tvl'),hit=idx.get(s);
+  list.replaceChildren();
+  if(!hit){
+    h.textContent=idx.size?(s?'No items with that tag yet. All tags:':'All tags'):'No tags yet';
+    const ul=mk('ul','tags');idx.forEach(v=>{const li=mk('li');li.append(chip(v.label,v.items.length));ul.append(li)});
+    const li=mk('li');li.append(ul);list.append(li);return;
+  }
+  h.textContent=hit.label;
+  hit.items.forEach(p=>{
+    const li=mk('li',p.cover?'item':'item nocov');
+    if(p.cover){const im=mk('img');im.src=p.cover;im.alt='';li.append(im)}
+    const b=mk('div');b.append(mk('h2',null,p.title),mk('p',null,p.description),tagRow(p));
+    const ds=dlLinks(p);if(ds.length){const d=mk('div','dls');d.append(...ds);b.append(d)}
+    li.append(b);list.append(li);
+  });
+}
+const P=window.PROJECTS||[],pf=t=>P.find(p=>p.frame===t),esc=s=>String(s).replace(/"/g,'&quot;');
+tile.innerHTML=F.map((f,i)=>{
+  const p=pf(f[5]),h=f[6],has=p&&p.cover;
+  return `<button class="frame" data-i="${i}" aria-label="${esc(p?p.title:f[5])}" style="--x:${f[0]};--y:${f[1]};--w:${f[2]};--h:${f[3]}">`
+    +(has?`<img class="cov" src="${esc(p.cover)}" alt="" draggable="false" style="left:${h[0]}%;top:${h[1]}%;width:${h[2]}%;height:${h[3]}%;${h[4]?'border-radius:50%':''}">`:'')
+    +`<img class="fr" src="${f[4]}" alt="" draggable="false">`+(has?'':`<span>${f[5]}</span>`)+`</button>`;
+}).join('');
+
+function openFrame(i){
+  const f=F[i],p=pf(f[5]),ds=p?dlLinks(p):[];
+  dlg.style.setProperty('--cv',p&&p.cover?`url("${String(p.cover).replace(/"/g,'%22')}")`:'none');
+  $('dt').textContent=p?p.title:f[5];
+  $('dsub').textContent=(p&&p.subtitle)||'';$('dsub').hidden=!(p&&p.subtitle);
+  $('dp').textContent=p?p.description:`This is a placeholder frame. To fill it, add a project in projects.js with frame: "${f[5]}".`;
+  $('dtags').replaceChildren(...((p&&p.tags)||[]).map(t=>{const li=mk('li');li.append(chip(t));return li}));
+  $('ddl').replaceChildren(...ds);$('ddl').hidden=!ds.length;
+  setMenu(false);dlg.showModal();
+}
+function setMenu(on){menu.hidden=!on;burger.setAttribute('aria-expanded',on)}
+{
+  const tg=[...tagIndex().values()].sort((a,b)=>a.label.localeCompare(b.label));
+  menu.replaceChildren(...tg.map(v=>{const a=mk('a',null,`${v.label} (${v.items.length})`);a.href=TAGHREF(slug(v.label));return a}));
+  const all=mk('a','all','All tags');all.href=ALLTAGS;menu.append(all);
+}
+burger.onclick=()=>setMenu(menu.hidden);
+document.addEventListener('click',e=>{if(!menu.hidden&&!menu.contains(e.target)&&!burger.contains(e.target))setMenu(false)});
+track.addEventListener('click',e=>{const b=e.target.closest('.frame');if(b)openFrame(+b.dataset.i)});
+dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.closest('.x'))dlg.close()});
+addEventListener('keydown',e=>{
+  if(e.key==='Escape')setMenu(false);
+  if(dlg.open)return;
+  if(e.key==='ArrowRight')tx+=W/8;
+  if(e.key==='ArrowLeft')tx-=W/8;
+});
+
+let W=1,x=0,tx=0,drag=null,moved=0,hover=false;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+function build(){
+  if(!tile.offsetWidth)return;
+  track.querySelectorAll('[data-clone]').forEach(t=>t.remove());
+  W=tile.offsetWidth||1;
+  for(let i=-1;i<Math.ceil(innerWidth/W)+1;i++){
+    const c=tile.cloneNode(true);c.removeAttribute('id');c.dataset.clone=1;c.setAttribute('aria-hidden','true');
+    c.querySelectorAll('button').forEach(b=>b.tabIndex=-1);i<0?track.prepend(c):track.append(c);
+  }
+}
+build();addEventListener('resize',build);
+
+strip.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
+  tx+=e.deltaMode===1?d*16:d;
+},{passive:false});
+strip.addEventListener('pointerdown',e=>{if(e.button)return;drag={sx:e.clientX,st:tx};moved=0;strip.style.cursor='grabbing'});
+addEventListener('pointermove',e=>{if(!drag)return;const d=e.clientX-drag.sx;moved=Math.max(moved,Math.abs(d));tx=drag.st-d});
+['pointerup','pointercancel'].forEach(n=>addEventListener(n,()=>{drag=null;strip.style.cursor=''}));
+strip.addEventListener('click',e=>{if(moved>6){e.preventDefault();e.stopPropagation();moved=0}},true);
+strip.addEventListener('pointerover',e=>{hover=!!e.target.closest('.frame')});
+strip.addEventListener('pointerleave',()=>{hover=false});
+
+let last=performance.now();
+function tick(t){
+  const dt=Math.min(t-last,50);last=t;
+  if(!(hover||drag||dlg.open||!menu.hidden||reduce.matches))tx+=12*dt/1000;
+  x+=(tx-x)*.14;
+  track.style.transform=`translate3d(${-(W+((x%W)+W)%W)}px,0,0)`;
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
